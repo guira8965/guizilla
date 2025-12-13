@@ -6,7 +6,7 @@ MC_SERVER_AUTOMATION="gui-mc-servers"
 TARGET_USER="${SUDO_USER:-$1}"
 
 ### Introduction
-echo "The scripts will be installed under the user `$TARGET_USER`"
+echo "The scripts will be installed under the user $TARGET_USER"
 read -p "Press ENTER to continue..."
 
 ### Check if script is running with root previleges, if not then prompt for elevation.
