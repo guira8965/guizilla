@@ -7,7 +7,6 @@ TARGET_USER="${SUDO_USER:-$1}"
 
 ### Introduction
 echo "The scripts will be installed under the user $TARGET_USER"
-read -p "Press ENTER to continue..."
 
 ### Check if script is running with root previleges, if not then prompt for elevation.
 if [ "$EUID" -ne 0 ]; then
