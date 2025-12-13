@@ -34,13 +34,13 @@ cp Features/mc-servers/service.service $CURRENT_USER/.config/systemd/user/$MC_SE
 ### Reload Systemd
 echo "Reloading systemd."
 systemctl daemon-reload
-systemctl --user daemon-reload
+sudo -u $1 systemctl --user daemon-reload
 
 ### Enable systemd services
 echo "Enabling and starting $SERVER_OPTIMIZATION.service"
 systemctl enable --now $SERVER_OPTIMIZATION.service
 echo "Enabling and starting $MC_SERVER_AUTOMATION.service"
-systemctl --user enable --now $MC_SERVER_AUTOMATION.service
+sudo -u $1 systemctl --user enable --now $MC_SERVER_AUTOMATION.service
 
 ### EOL
 read -p "Press ENTER to exit."
