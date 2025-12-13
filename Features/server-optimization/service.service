@@ -1,0 +1,9 @@
+[Unit]
+Description=%N
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /usr/local/bin/%N.sh
+
+[Install]
+WantedBy=multi-user.target 
