@@ -4,7 +4,7 @@
 SERVER_OPTIMIZATION="gui-optimization"
 MC_SERVER_AUTOMATION="gui-mc-servers"
 
-### Check if script is running with root previleges, if not then prompt for elevation.
+### Check if script is running with root previleges, if so then disregard.
 if [ "$EUID" -eq 0 ]; then
     TARGET_USER="${SUDO_USER:-username}"
     echo "Script is running as root. Dropping privileges to $TARGET_USER..."
@@ -14,8 +14,6 @@ fi
 echo "Script is running with user level previleges."
 
 ### Install script and systemd service for minecraft server automization
-echo "Moving $MC_SERVER_AUTOMATION.sh to /usr/local/bin/$HOME/$MC_SERVER_AUTOMATION.sh"
-cp Features/mc-servers/script.sh /usr/local/bin/$MC_SERVER_AUTOMATION.sh
 echo "Moving $MC_SERVER_AUTOMATION.service to $HOME/.config/systemd/user/$MC_SERVER_AUTOMATION.service"
 cp Features/mc-servers/service.service $HOME/.config/systemd/user/$MC_SERVER_AUTOMATION.service
 
@@ -38,8 +36,6 @@ mkdir -p /usr/local/bin
 ### Install script and systemd service for server optimization
 echo "Moving $SERVER_OPTIMIZATION.sh to /usr/local/bin/$SERVER_OPTIMIZATION.sh"
 cp Features/server-optimization/script.sh /usr/local/bin/$SERVER_OPTIMIZATION.sh
-echo "Moving $SERVER_OPTIMIZATION.service to /etc/systemd/system/$SERVER_OPTIMIZATION.service"
-cp Features/server-optimization/service.service /etc/systemd/system/$SERVER_OPTIMIZATION.service
 
 ### Reload Systemd
 echo "Reloading systemd."
