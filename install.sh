@@ -42,26 +42,6 @@ sudo -u "$TARGET_USER" XDG_RUNTIME_DIR="/run/user/$(id -u $TARGET_USER)" \
 sudo -u "$TARGET_USER" XDG_RUNTIME_DIR="/run/user/$(id -u $TARGET_USER)" \
     systemctl --user enable --now $MC_SERVER_AUTOMATION.service
 
-### Reload Systemd
-echo "Reloading systemd."
-systemctl daemon-reload
-
-### Enable systemd services (root)
-echo "Enabling and starting $SERVER_OPTIMIZATION.service"
-systemctl enable --now $SERVER_OPTIMIZATION.service
-echo "Enabling and starting $MC_SERVER_AUTOMATION.service"
-
-### Check if script is running with root previleges, if so then disregard.
-if [ "$EUID" -eq 0 ]; then
-    echo "Script is running as root. Dropping privileges to $TARGET_USER..."
-    exec sudo -u "$TARGET_USER" bash "$0" "$@"
-fi
-echo "Script is running with user level previleges."
-
-### Enable systemd services (user-level)
-systemctl --user daemon-reload
-systemctl --user enable --now $MC_SERVER_AUTOMATION.service
-
 ### EOL
 read -p "Press ENTER to exit."
 echo "Installation complete."
