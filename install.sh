@@ -3,7 +3,24 @@
 ### Names for each features.
 SERVER_OPTIMIZATION="gui-optimization"
 MC_SERVER_AUTOMATION="gui-mc-servers"
-CURRENT_USER="/home/$1"
+
+### Check if script is running with root previleges, if not then prompt for elevation.
+if [ "$EUID" -eq 0 ]; then
+    TARGET_USER="${SUDO_USER:-username}"
+    echo "Script is running as root. Dropping privileges to $TARGET_USER..."
+
+    exec sudo -u "$TARGET_USER" bash "$0" "$@"
+fi
+echo "Script is running with user level previleges."
+
+### Install script and systemd service for minecraft server automization
+echo "Moving $MC_SERVER_AUTOMATION.sh to /usr/local/bin/$HOME/$MC_SERVER_AUTOMATION.sh"
+cp Features/mc-servers/script.sh /usr/local/bin/$MC_SERVER_AUTOMATION.sh
+echo "Moving $MC_SERVER_AUTOMATION.service to $HOME/.config/systemd/user/$MC_SERVER_AUTOMATION.service"
+cp Features/mc-servers/service.service $HOME/.config/systemd/user/$MC_SERVER_AUTOMATION.service
+
+### Create directories, just in case they don't exist.
+mkdir -p $HOME/.config/systemd/user
 
 ### Check if script is running with root previleges, if not then prompt for elevation.
 if [ "$EUID" -ne 0 ]; then
@@ -17,19 +34,12 @@ read -p "Press ENTER to continue..."
 
 ### Create directories, just in case they don't exist.
 mkdir -p /usr/local/bin
-mkdir -p $CURRENT_USER/.config/systemd/user
 
 ### Install script and systemd service for server optimization
 echo "Moving $SERVER_OPTIMIZATION.sh to /usr/local/bin/$SERVER_OPTIMIZATION.sh"
 cp Features/server-optimization/script.sh /usr/local/bin/$SERVER_OPTIMIZATION.sh
 echo "Moving $SERVER_OPTIMIZATION.service to /etc/systemd/system/$SERVER_OPTIMIZATION.service"
 cp Features/server-optimization/service.service /etc/systemd/system/$SERVER_OPTIMIZATION.service
-
-### Install script and systemd service for minecraft server automization
-echo "Moving $MC_SERVER_AUTOMATION.sh to /usr/local/bin/$CURRENT_USER/$MC_SERVER_AUTOMATION.sh"
-cp Features/mc-servers/script.sh /usr/local/bin/$MC_SERVER_AUTOMATION.sh
-echo "Moving $MC_SERVER_AUTOMATION.service to $CURRENT_USER/.config/systemd/user/$MC_SERVER_AUTOMATION.service"
-cp Features/mc-servers/service.service $CURRENT_USER/.config/systemd/user/$MC_SERVER_AUTOMATION.service
 
 ### Reload Systemd
 echo "Reloading systemd."
