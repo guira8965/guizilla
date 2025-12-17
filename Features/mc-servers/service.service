@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 Type=oneshot
+ExecStartPre=/bin/sleep 5
 ExecStart=/usr/bin/bash /usr/local/bin/%N.sh start
 ExecStop=/usr/bin/bash /usr/local/bin/%N.sh stop
 RemainAfterExit=yes
