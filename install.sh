@@ -17,11 +17,11 @@ echo "Script is running with root previleges."
 
 read -p "Press ENTER to continue..."
 
-# Create directories
+### Create directories
 mkdir -p /usr/local/bin
 sudo -u "$TARGET_USER" mkdir -p "/home/$TARGET_USER/.config/systemd/user/default.target.wants"
 
-# Copy scripts/services
+### Copy scripts/services
 echo "Installing $SERVER_OPTIMIZATION script..."
 cp Features/server-optimization/script.sh /usr/local/bin/$SERVER_OPTIMIZATION.sh
 chmod +x /usr/local/bin/$SERVER_OPTIMIZATION.sh
@@ -35,10 +35,10 @@ echo "Reloading systemd and enabling root-level service..."
 systemctl daemon-reload
 systemctl enable --now $SERVER_OPTIMIZATION.service
 
-# Enable lingering for user to allow user services without login
+### Enable lingering for user to allow user services without login
 loginctl enable-linger "$TARGET_USER"
 
-# Reload user-level systemd and enable user service
+### Reload user-level systemd and enable user service
 echo "Enabling user-level Minecraft service..."
 sudo -u "$TARGET_USER" XDG_RUNTIME_DIR="/run/user/$(id -u $TARGET_USER)" \
     systemctl --user daemon-reload
