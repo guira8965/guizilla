@@ -22,10 +22,20 @@ mkdir -p /usr/local/bin
 sudo -u "$TARGET_USER" mkdir -p "/home/$TARGET_USER/.config/systemd/user/default.target.wants"
 
 ### Copy scripts/services
+# Optimization script
 echo "Installing $SERVER_OPTIMIZATION script..."
 cp Features/server-optimization/script.sh /usr/local/bin/$SERVER_OPTIMIZATION.sh
 chmod +x /usr/local/bin/$SERVER_OPTIMIZATION.sh
+# Optimization service
+echo "Installing $SERVER_OPTIMIZATION service for user..."
+cp Features/server-optimization/service.service "/etc/systemd/system/$SERVER_OPTIMIZATION.service"
+chown "$TARGET_USER:$TARGET_USER" "/etc/systemd/system/$SERVER_OPTIMIZATION.service"
 
+# Minecraft server automation script
+echo "Installing $MC_SERVER_AUTOMATION script..."
+cp Features/mc-servers/script.sh /usr/local/bin/$MC_SERVER_AUTOMATION.sh
+chmod +x /usr/local/bin/$MC_SERVER_AUTOMATION.sh
+# Minecraft server automation service
 echo "Installing $MC_SERVER_AUTOMATION service for user..."
 cp Features/mc-servers/service.service "/home/$TARGET_USER/.config/systemd/user/$MC_SERVER_AUTOMATION.service"
 chown "$TARGET_USER:$TARGET_USER" "/home/$TARGET_USER/.config/systemd/user/$MC_SERVER_AUTOMATION.service"
